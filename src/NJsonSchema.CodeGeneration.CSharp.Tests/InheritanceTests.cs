@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NJsonSchema.CodeGeneration.CSharp;
 using NJsonSchema.Converters;
+using NJsonSchema.Generation;
 using Xunit;
 
 namespace NJsonSchema.CodeGeneration.Tests.CSharp
@@ -69,6 +71,68 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
         {
             public ExceptionBase Exception { get; set; }
         }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        [JsonConverter(typeof(JsonInheritanceConverter), "discriminator")]
+        [KnownType(typeof(Label))]
+        public abstract class LabelBase {
+            public string Name { get; set; }
+        }
+
+        [KnownType(typeof(LabelSet))]
+        public class Label : LabelBase {
+        }
+
+        public class LabelSet : Label {
+            public Collection<LabelBase> Labels { get; set; }
+        }
+
+
+        [Fact]
+        public async Task LabelHierarchy() {
+            //// Arrange
+            var jsonSchemaGeneratorSettings = new JsonSchemaGeneratorSettings() {
+                SchemaType = SchemaType.JsonSchema,
+            };
+
+
+            var labelSchema = JsonSchema.FromType<Label>(jsonSchemaGeneratorSettings);
+            var labelSchemaData = labelSchema.ToJson();
+
+            var generator = new CSharpGenerator(labelSchema, new CSharpGeneratorSettings {
+                JsonLibrary = CSharpJsonLibrary.SystemTextJson,
+                ClassStyle = CSharpClassStyle.Record,
+                HandleReferences = false,
+                Namespace = "Philips.MyNamespace",
+                SchemaType = SchemaType.JsonSchema
+
+            });
+
+            //// Act
+            var code = generator.GenerateFile();
+            File.WriteAllText(@"D:\jsonschema\inheritance_demo\NJsonSchemaInheritanceDemo\NJsonSchemaInheritanceDemo\Label.cs", code);
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        [JsonConverter(typeof(JsonInheritanceConverter), "discriminator")]
+        [KnownType(typeof(Cat))]
+        public abstract class Animal {
+            public string Name { get; set; }
+            public Collection<Animal> Children { get; set; }
+        }
+
+        [KnownType(typeof(PersianCat))]
+        public class Cat : Animal {
+        }
+
+        public class PersianCat : Cat {
+            public int HairLength { get; set; }
+        }
+
 
         [Fact]
         public async Task When_class_with_discriminator_has_base_class_then_csharp_is_generated_correctly()
@@ -77,10 +141,37 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
             var schema = JsonSchema.FromType<ExceptionContainer>();
             var data = schema.ToJson();
 
-            var generator = new CSharpGenerator(schema, new CSharpGeneratorSettings { ClassStyle = CSharpClassStyle.Poco });
+
+
+            var jsonSchemaGeneratorSettings = new JsonSchemaGeneratorSettings() { 
+                SchemaType = SchemaType.JsonSchema,
+            };
+
+
+            var animalSchema = JsonSchema.FromType<Animal>(jsonSchemaGeneratorSettings);
+            var animalSchemaData = animalSchema.ToJson();
+
+            var catSchema = JsonSchema.FromType<Cat>(jsonSchemaGeneratorSettings);
+            var catSchemaData = catSchema.ToJson();
+
+            var persianCatSchema = JsonSchema.FromType<PersianCat>(jsonSchemaGeneratorSettings);
+            var persianCatSchemaData = persianCatSchema.ToJson();
+
+
+            var generator = new CSharpGenerator(catSchema, new CSharpGeneratorSettings {
+                JsonLibrary = CSharpJsonLibrary.SystemTextJson,
+                ClassStyle = CSharpClassStyle.Record,
+                HandleReferences = false,
+                Namespace = "Philips.MyNamespace",
+                SchemaType = SchemaType.JsonSchema
+                
+            });
+
+
 
             //// Act
             var code = generator.GenerateFile();
+            File.WriteAllText(@"D:\jsonschema\inheritance_demo\NJsonSchemaInheritanceDemo\NJsonSchemaInheritanceDemo\Animal.cs", code);
 
             //// Assert
             Assert.Contains("Foobar.", data);
