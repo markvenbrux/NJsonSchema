@@ -76,15 +76,15 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
 
         [JsonConverter(typeof(JsonInheritanceConverter), "discriminator")]
         [KnownType(typeof(Label))]
+        [KnownType(typeof(LabelSet))]
         public abstract class LabelBase {
             public string Name { get; set; }
         }
 
-        [KnownType(typeof(LabelSet))]
         public class Label : LabelBase {
         }
 
-        public class LabelSet : Label {
+        public class LabelSet : LabelBase {
             public Collection<LabelBase> Labels { get; set; }
         }
 
@@ -97,13 +97,14 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
             };
 
 
-            var labelSchema = JsonSchema.FromType<Label>(jsonSchemaGeneratorSettings);
-            var labelSchemaData = labelSchema.ToJson();
+            var labelBaseSchema = JsonSchema.FromType<LabelBase>(jsonSchemaGeneratorSettings);
+            var labelBaseSchemaData = labelBaseSchema.ToJson();
+            File.WriteAllText(@"D:\jsonschema\inheritance_demo\NJsonSchemaInheritanceDemo\NJsonSchemaInheritanceDemo\LabelBase.schema.json", labelBaseSchemaData);
 
-            var generator = new CSharpGenerator(labelSchema, new CSharpGeneratorSettings {
+            var generator = new CSharpGenerator(labelBaseSchema, new CSharpGeneratorSettings {
                 JsonLibrary = CSharpJsonLibrary.SystemTextJson,
                 ClassStyle = CSharpClassStyle.Record,
-                HandleReferences = false,
+                HandleReferences = true,
                 Namespace = "Philips.MyNamespace",
                 SchemaType = SchemaType.JsonSchema
 
@@ -246,7 +247,7 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
             Assert.Contains("[JsonInheritanceAttribute(\"PersianCat\", typeof(PersianCat))]", code);
         }
 
-        private string GetTestDirectory()
+        private static string GetTestDirectory()
         {
             var codeBase = Assembly.GetExecutingAssembly().CodeBase;
             var uri = new UriBuilder(codeBase);
