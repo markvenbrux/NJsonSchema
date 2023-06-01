@@ -39,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{863B2D88
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "..\build\_build.csproj", "{8E4E5A64-B5B7-4718-A92F-CB6B08512264}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NJsonSchemaInheritanceDemo", "NJsonSchema.InheritanceDemo\NJsonSchemaInheritanceDemo.csproj", "{32A72376-5D42-4A54-9726-A2841BFB6A9F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NJsonSchema.InheritanceDemo", "NJsonSchema.InheritanceDemo\NJsonSchema.InheritanceDemo.csproj", "{32A72376-5D42-4A54-9726-A2841BFB6A9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
