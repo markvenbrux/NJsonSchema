@@ -95,6 +95,8 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
         [Fact]
         public async Task LabelHierarchy() {
             //// Arrange
+            var outputPath = @"..\..\..\..\NJsonSchema.InheritanceDemo\";
+
             var jsonSchemaGeneratorSettings = new JsonSchemaGeneratorSettings() {
                 SchemaType = SchemaType.JsonSchema,
             };
@@ -102,8 +104,9 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
 
             var labelBaseSchema = JsonSchema.FromType<LabelBase>(jsonSchemaGeneratorSettings);
             var labelBaseSchemaData = labelBaseSchema.ToJson();
-            File.WriteAllText(@"D:\jsonschema\inheritance_demo\NJsonSchemaInheritanceDemo\NJsonSchemaInheritanceDemo\LabelBase.schema.json", labelBaseSchemaData);
+            File.WriteAllText(outputPath + @"LabelBase.schema.json", labelBaseSchemaData);
 
+                
             var generator = new CSharpGenerator(labelBaseSchema, new CSharpGeneratorSettings {
                 JsonLibrary = CSharpJsonLibrary.SystemTextJson,
                 ClassStyle = CSharpClassStyle.Record,
@@ -115,7 +118,7 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
 
             //// Act
             var code = generator.GenerateFile();
-            File.WriteAllText(@"D:\jsonschema\inheritance_demo\NJsonSchemaInheritanceDemo\NJsonSchemaInheritanceDemo\Label.cs", code);
+            File.WriteAllText(outputPath + @"LabelBase.cs", code);
         }
 
 

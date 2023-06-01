@@ -28,7 +28,7 @@ namespace Philips.NJsonSchemaInheritanceDemo {
 
             string labelJsonString = JsonSerializer.Serialize<MyNamespace.LabelSet>(labelSet, jsonSerializerOptions);
             File.WriteAllText(@"Label.json", labelJsonString);
-            var deserializedLabelSet = JsonSerializer.Deserialize<MyNamespace.LabelBase>(labelJsonString, jsonSerializerOptions);
+            var deserializedLabelSet = JsonSerializer.Deserialize<MyNamespace.LabelSet>(labelJsonString, jsonSerializerOptions);
         }
     }
 }
