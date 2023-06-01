@@ -78,10 +78,13 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
         [KnownType(typeof(Label))]
         [KnownType(typeof(LabelSet))]
         public abstract class LabelBase {
-            public string Name { get; set; }
+            public string Id { get; set; }
+            public bool IsCreatedByReader { get; set; }
         }
 
         public class Label : LabelBase {
+            public string MeasurementType { get; set; }
+            public string Color { get; set; }
         }
 
         public class LabelSet : LabelBase {
