@@ -2,48 +2,18 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Task",
   "type": "object",
-  "additionalProperties": false,
   "properties": {
     "LabelSet": {
-      "oneOf": [
-        {
-          "type": "null"
-        },
-        {
-          "$ref": "#/definitions/LabelSet"
-        }
-      ]
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/LabelBase"
+      }
     },
     "Id": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": "string"
     }
   },
   "definitions": {
-    "LabelSet": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/LabelBase"
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "Labels": {
-              "type": [
-                "array",
-                "null"
-              ],
-              "items": {
-                "$ref": "#/definitions/LabelBase"
-              }
-            }
-          }
-        }
-      ]
-    },
     "LabelBase": {
       "type": "object",
       "discriminator": {
@@ -54,7 +24,6 @@
         }
       },
       "x-abstract": true,
-      "additionalProperties": false,
       "required": [
         "discriminator"
       ],
@@ -63,10 +32,7 @@
           "type": "boolean"
         },
         "Id": {
-          "type": [
-            "null",
-            "string"
-          ]
+          "type": "string"
         },
         "discriminator": {
           "type": "string"
@@ -80,19 +46,30 @@
         },
         {
           "type": "object",
-          "additionalProperties": false,
           "properties": {
             "MeasurementType": {
-              "type": [
-                "null",
-                "string"
-              ]
+              "type": "string"
             },
             "Color": {
-              "type": [
-                "null",
-                "string"
-              ]
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "LabelSet": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/LabelBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Labels": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/LabelBase"
+              }
             }
           }
         }

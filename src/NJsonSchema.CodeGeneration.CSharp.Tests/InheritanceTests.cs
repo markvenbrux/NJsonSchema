@@ -92,7 +92,7 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
         }
 
         public class Task {
-            public LabelSet LabelSet { get; set; }
+            public Collection<LabelBase> LabelSet { get; set; }
             public string Id { get; set; }
         }
 
@@ -104,6 +104,10 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
 
             var jsonSchemaGeneratorSettings = new JsonSchemaGeneratorSettings() {
                 SchemaType = SchemaType.JsonSchema,
+                AlwaysAllowAdditionalObjectProperties = true,
+                AllowReferencesWithProperties = true,
+                DefaultReferenceTypeNullHandling = ReferenceTypeNullHandling.NotNull,
+                DefaultDictionaryValueReferenceTypeNullHandling = ReferenceTypeNullHandling.NotNull
             };
 
             // Select root type for schema generation
@@ -117,10 +121,13 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
                 
             var generator = new CSharpGenerator(schema, new CSharpGeneratorSettings {
                 JsonLibrary = CSharpJsonLibrary.SystemTextJson,
+                //JsonLibrary = CSharpJsonLibrary.NewtonsoftJson,
                 ClassStyle = CSharpClassStyle.Record,
                 HandleReferences = true,
                 Namespace = "Philips.MyNamespace",
-                SchemaType = SchemaType.JsonSchema
+                SchemaType = SchemaType.JsonSchema,
+                RequiredPropertiesMustBeDefined = true,
+                GenerateOptionalPropertiesAsNullable = true
 
             });
             var code = generator.GenerateFile();
