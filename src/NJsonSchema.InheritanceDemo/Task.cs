@@ -109,7 +109,10 @@ namespace Philips.MyNamespace
 
             this.Id = @id;
 
-        }
+        }    /// <summary>
+        /// The Labelset
+        /// </summary>
+
         [System.Text.Json.Serialization.JsonPropertyName("LabelSet")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]   

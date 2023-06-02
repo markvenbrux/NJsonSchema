@@ -91,7 +91,15 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
             public Collection<LabelBase> Labels { get; set; }
         }
 
+        
         public class Task {
+            /// <summary>
+            /// The Labelset
+            /// </summary>
+            /// <example>
+            /// Example 1
+            /// </example>
+            /// <title>Title 1</title>
             public LabelSet LabelSet { get; set; }
             public string Id { get; set; }
         }

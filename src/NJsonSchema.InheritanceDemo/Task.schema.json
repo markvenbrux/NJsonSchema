@@ -5,6 +5,8 @@
   "additionalProperties": false,
   "properties": {
     "LabelSet": {
+      "description": "The Labelset",
+      "x-example": "Example 1",
       "oneOf": [
         {
           "type": "null"
