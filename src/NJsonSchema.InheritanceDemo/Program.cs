@@ -25,10 +25,15 @@ namespace Philips.NJsonSchemaInheritanceDemo {
                 labels
                 );
 
+            var myObject = new MyNamespace.Task("BiotelTask", labelSet);
 
-            string labelJsonString = JsonSerializer.Serialize<MyNamespace.LabelSet>(labelSet, jsonSerializerOptions);
-            File.WriteAllText(@"Label.json", labelJsonString);
-            var deserializedLabelSet = JsonSerializer.Deserialize<MyNamespace.LabelSet>(labelJsonString, jsonSerializerOptions);
+
+            var myObjectType = myObject.GetType();
+            var myObjectName = myObjectType.Name;
+
+            string jsonString = JsonSerializer.Serialize(myObject, myObjectType, jsonSerializerOptions);
+            File.WriteAllText($"{myObjectName}.json", jsonString);
+            var deserializedJson = JsonSerializer.Deserialize(jsonString, myObjectType, jsonSerializerOptions);
         }
     }
 }

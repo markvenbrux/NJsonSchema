@@ -28,7 +28,7 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
         }
 
         [Fact]
-        public async Task When_empty_class_inherits_from_dictionary_then_allOf_inheritance_still_works()
+        public async void When_empty_class_inherits_from_dictionary_then_allOf_inheritance_still_works()
         {
             //// Arrange
             var schema = JsonSchema.FromType<MyContainer>();
@@ -78,8 +78,8 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
         [KnownType(typeof(Label))]
         [KnownType(typeof(LabelSet))]
         public abstract class LabelBase {
-            public string Id { get; set; }
             public bool IsCreatedByReader { get; set; }
+            public string Id { get; set; }
         }
 
         public class Label : LabelBase {
@@ -91,23 +91,31 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
             public Collection<LabelBase> Labels { get; set; }
         }
 
+        public class Task {
+            public LabelSet LabelSet { get; set; }
+            public string Id { get; set; }
+        }
+
+
 
         [Fact]
-        public async Task LabelHierarchy() {
-            //// Arrange
+        public async void LabelHierarchy() {
             var outputPath = @"..\..\..\..\NJsonSchema.InheritanceDemo\";
 
             var jsonSchemaGeneratorSettings = new JsonSchemaGeneratorSettings() {
                 SchemaType = SchemaType.JsonSchema,
             };
 
-
-            var labelBaseSchema = JsonSchema.FromType<LabelBase>(jsonSchemaGeneratorSettings);
-            var labelBaseSchemaData = labelBaseSchema.ToJson();
-            File.WriteAllText(outputPath + @"LabelBase.schema.json", labelBaseSchemaData);
+            // Select root type for schema generation
+            var schemaRootType = typeof(Task);
+          
+            // Generic generation of schema and serialization code
+            var schema = JsonSchema.FromType(schemaRootType, jsonSchemaGeneratorSettings);
+            var schemaData = schema.ToJson();
+            File.WriteAllText(outputPath + $"{schemaRootType.Name}.schema.json", schemaData);
 
                 
-            var generator = new CSharpGenerator(labelBaseSchema, new CSharpGeneratorSettings {
+            var generator = new CSharpGenerator(schema, new CSharpGeneratorSettings {
                 JsonLibrary = CSharpJsonLibrary.SystemTextJson,
                 ClassStyle = CSharpClassStyle.Record,
                 HandleReferences = true,
@@ -115,125 +123,18 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
                 SchemaType = SchemaType.JsonSchema
 
             });
-
-            //// Act
             var code = generator.GenerateFile();
-            File.WriteAllText(outputPath + @"LabelBase.cs", code);
+            File.WriteAllText(outputPath + $"{schemaRootType.Name}.cs", code);
+        
         }
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        [JsonConverter(typeof(JsonInheritanceConverter), "discriminator")]
-        [KnownType(typeof(Cat))]
-        public abstract class Animal {
-            public string Name { get; set; }
-            public Collection<Animal> Children { get; set; }
-        }
-
-        [KnownType(typeof(PersianCat))]
-        public class Cat : Animal {
-        }
-
-        public class PersianCat : Cat {
-            public int HairLength { get; set; }
-        }
-
 
         [Fact]
-        public async Task When_class_with_discriminator_has_base_class_then_csharp_is_generated_correctly()
-        {
-            //// Arrange
-            var schema = JsonSchema.FromType<ExceptionContainer>();
-            var data = schema.ToJson();
-
-
-
-            var jsonSchemaGeneratorSettings = new JsonSchemaGeneratorSettings() { 
-                SchemaType = SchemaType.JsonSchema,
-            };
-
-
-            var animalSchema = JsonSchema.FromType<Animal>(jsonSchemaGeneratorSettings);
-            var animalSchemaData = animalSchema.ToJson();
-
-            var catSchema = JsonSchema.FromType<Cat>(jsonSchemaGeneratorSettings);
-            var catSchemaData = catSchema.ToJson();
-
-            var persianCatSchema = JsonSchema.FromType<PersianCat>(jsonSchemaGeneratorSettings);
-            var persianCatSchemaData = persianCatSchema.ToJson();
-
-
-            var generator = new CSharpGenerator(catSchema, new CSharpGeneratorSettings {
-                JsonLibrary = CSharpJsonLibrary.SystemTextJson,
-                ClassStyle = CSharpClassStyle.Record,
-                HandleReferences = false,
-                Namespace = "Philips.MyNamespace",
-                SchemaType = SchemaType.JsonSchema
-                
-            });
-
-
-
-            //// Act
-            var code = generator.GenerateFile();
-            File.WriteAllText(@"D:\jsonschema\inheritance_demo\NJsonSchemaInheritanceDemo\NJsonSchemaInheritanceDemo\Animal.cs", code);
-
-            //// Assert
-            Assert.Contains("Foobar.", data);
-            Assert.Contains("Foobar.", code);
-
-            Assert.Contains("class ExceptionBase : Exception", code);
-            Assert.Contains("class MyException : ExceptionBase", code);
-        }
-
-        [Fact]
-        public async Task When_property_references_any_schema_with_inheritance_then_property_type_is_correct()
-        {
-            //// Arrange
-            var json = @"{
-    ""type"": ""object"",
-    ""properties"": {
-        ""dog"": {
-            ""$ref"": ""#/definitions/Dog""
-        }
-    },
-    ""definitions"": {
-        ""Pet"": {
-            ""type"": ""object"",
-            ""properties"": {
-                ""name"": {
-                    ""type"": ""string""
-                }
-            }
-        },
-        ""Dog"": {
-            ""title"": ""Dog"",
-            ""description"": """",
-            ""allOf"": [
-                {
-                    ""$ref"": ""#/definitions/Pet""
-                },
-                {
-                    ""type"": ""object""
-                }
-            ]
-        }
-    }
-}";
-            var schema = await JsonSchema.FromJsonAsync(json);
-            var generator = new CSharpGenerator(schema, new CSharpGeneratorSettings { ClassStyle = CSharpClassStyle.Poco });
-
-            //// Act
-            var code = generator.GenerateFile();
-
-            //// Assert
-            Assert.Contains("public Dog Dog { get; set; }", code);
-        }
-
-        [Fact]
-        public async Task When_definitions_inherit_from_root_schema()
+        public async void When_definitions_inherit_from_root_schema()
         {
             //// Arrange
             var path = GetTestDirectory() + "/References/Animal.json";

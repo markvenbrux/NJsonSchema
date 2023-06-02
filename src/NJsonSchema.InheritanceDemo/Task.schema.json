@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Task",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "LabelSet": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/definitions/LabelSet"
+        }
+      ]
+    },
+    "Id": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  },
+  "definitions": {
+    "LabelSet": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/LabelBase"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "Labels": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/definitions/LabelBase"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "LabelBase": {
+      "type": "object",
+      "discriminator": {
+        "propertyName": "discriminator",
+        "mapping": {
+          "Label": "#/definitions/Label",
+          "LabelSet": "#/definitions/LabelSet"
+        }
+      },
+      "x-abstract": true,
+      "additionalProperties": false,
+      "required": [
+        "discriminator"
+      ],
+      "properties": {
+        "IsCreatedByReader": {
+          "type": "boolean"
+        },
+        "Id": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "discriminator": {
+          "type": "string"
+        }
+      }
+    },
+    "Label": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/LabelBase"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "MeasurementType": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "Color": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -10,6 +10,61 @@ namespace Philips.MyNamespace
     #pragma warning disable // Disable all warnings
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v9.0.0.0)")]
+    public partial class LabelSet : LabelBase
+    {
+        [System.Text.Json.Serialization.JsonConstructor]
+
+        public LabelSet(string @id, bool @isCreatedByReader, System.Collections.Generic.ICollection<LabelBase> @labels)
+
+
+            : base(id, isCreatedByReader)
+
+        {
+
+            this.Labels = @labels;
+
+        }
+        [System.Text.Json.Serialization.JsonPropertyName("Labels")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]   
+        public System.Collections.Generic.ICollection<LabelBase> Labels { get; }
+
+
+    }
+
+    [JsonInheritanceConverter(typeof(LabelBase), "discriminator")]
+    [JsonInheritanceAttribute("LabelSet", typeof(LabelSet))]
+    [JsonInheritanceAttribute("Label", typeof(Label))]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v9.0.0.0)")]
+    public abstract partial class LabelBase
+    {
+        [System.Text.Json.Serialization.JsonConstructor]
+
+        protected LabelBase(string @id, bool @isCreatedByReader)
+
+
+        {
+
+            this.IsCreatedByReader = @isCreatedByReader;
+
+            this.Id = @id;
+
+        }
+        [System.Text.Json.Serialization.JsonPropertyName("IsCreatedByReader")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]   
+        public bool IsCreatedByReader { get; }
+
+
+        [System.Text.Json.Serialization.JsonPropertyName("Id")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]   
+        public string Id { get; }
+
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v9.0.0.0)")]
     public partial class Label : LabelBase
     {
         [System.Text.Json.Serialization.JsonConstructor]
@@ -41,56 +96,30 @@ namespace Philips.MyNamespace
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v9.0.0.0)")]
-    public partial class LabelSet : LabelBase
+    public partial class Task
     {
         [System.Text.Json.Serialization.JsonConstructor]
 
-        public LabelSet(string @id, bool @isCreatedByReader, System.Collections.Generic.ICollection<LabelBase> @labels)
-
-
-            : base(id, isCreatedByReader)
-
-        {
-
-            this.Labels = @labels;
-
-        }
-        [System.Text.Json.Serialization.JsonPropertyName("Labels")]
-
-        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]   
-        public System.Collections.Generic.ICollection<LabelBase> Labels { get; }
-
-
-    }
-
-    [JsonInheritanceConverter(typeof(LabelBase), "discriminator")]
-    [JsonInheritanceAttribute("Label", typeof(Label))]
-    [JsonInheritanceAttribute("LabelSet", typeof(LabelSet))]
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v9.0.0.0)")]
-    public abstract partial class LabelBase
-    {
-        [System.Text.Json.Serialization.JsonConstructor]
-
-        protected LabelBase(string @id, bool @isCreatedByReader)
+        public Task(string @id, LabelSet @labelSet)
 
 
         {
+
+            this.LabelSet = @labelSet;
 
             this.Id = @id;
 
-            this.IsCreatedByReader = @isCreatedByReader;
-
         }
+        [System.Text.Json.Serialization.JsonPropertyName("LabelSet")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]   
+        public LabelSet LabelSet { get; }
+
+
         [System.Text.Json.Serialization.JsonPropertyName("Id")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]   
         public string Id { get; }
-
-
-        [System.Text.Json.Serialization.JsonPropertyName("IsCreatedByReader")]
-
-        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]   
-        public bool IsCreatedByReader { get; }
 
 
     }
