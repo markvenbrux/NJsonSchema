@@ -91,15 +91,18 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
             public Collection<LabelBase> Labels { get; set; }
         }
 
-        
+
+        /// <summary>
+        /// The Labelset
+        /// </summary>
+        /// <example>
+        /// Example 1
+        /// </example>
+        /// <example>
+        /// Example 2
+        /// </example>
+        /// <title>Title 1</title>
         public class Task {
-            /// <summary>
-            /// The Labelset
-            /// </summary>
-            /// <example>
-            /// Example 1
-            /// </example>
-            /// <title>Title 1</title>
             public LabelSet LabelSet { get; set; }
             public string Id { get; set; }
         }
@@ -112,7 +115,10 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
 
             var jsonSchemaGeneratorSettings = new JsonSchemaGeneratorSettings() {
                 SchemaType = SchemaType.JsonSchema,
-                AlwaysAllowAdditionalObjectProperties = true
+                AlwaysAllowAdditionalObjectProperties = true,
+                AllowReferencesWithProperties = true,
+                DefaultReferenceTypeNullHandling = ReferenceTypeNullHandling.NotNull,
+                DefaultDictionaryValueReferenceTypeNullHandling = ReferenceTypeNullHandling.NotNull
             };
 
             // Select root type for schema generation
@@ -126,10 +132,13 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
                 
             var generator = new CSharpGenerator(schema, new CSharpGeneratorSettings {
                 JsonLibrary = CSharpJsonLibrary.SystemTextJson,
+                //JsonLibrary = CSharpJsonLibrary.NewtonsoftJson,
                 ClassStyle = CSharpClassStyle.Record,
                 HandleReferences = true,
                 Namespace = "Philips.MyNamespace",
-                SchemaType = SchemaType.JsonSchema
+                SchemaType = SchemaType.JsonSchema,
+                RequiredPropertiesMustBeDefined = true,
+                GenerateOptionalPropertiesAsNullable = true
 
             });
             var code = generator.GenerateFile();
