@@ -2,7 +2,6 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Task",
   "type": "object",
-  "additionalProperties": false,
   "properties": {
     "LabelSet": {
       "description": "The Labelset",
@@ -31,7 +30,6 @@
         },
         {
           "type": "object",
-          "additionalProperties": false,
           "properties": {
             "Labels": {
               "type": [
@@ -56,7 +54,6 @@
         }
       },
       "x-abstract": true,
-      "additionalProperties": false,
       "required": [
         "discriminator"
       ],
@@ -82,7 +79,6 @@
         },
         {
           "type": "object",
-          "additionalProperties": false,
           "properties": {
             "MeasurementType": {
               "type": [

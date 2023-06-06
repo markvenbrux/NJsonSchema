@@ -112,6 +112,7 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
 
             var jsonSchemaGeneratorSettings = new JsonSchemaGeneratorSettings() {
                 SchemaType = SchemaType.JsonSchema,
+                AlwaysAllowAdditionalObjectProperties = true
             };
 
             // Select root type for schema generation
