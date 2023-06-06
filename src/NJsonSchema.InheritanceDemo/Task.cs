@@ -9,9 +9,32 @@ namespace Philips.MyNamespace
 {
     #pragma warning disable // Disable all warnings
 
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v9.0.0.0)")]
+    public partial class LabelSet : LabelBase
+    {
+        [System.Text.Json.Serialization.JsonConstructor]
+
+        public LabelSet(string @id, bool? @isCreatedByReader, System.Collections.Generic.ICollection<LabelBase> @labels)
+
+
+            : base(id, isCreatedByReader)
+
+        {
+
+            this.Labels = @labels;
+
+        }
+        [System.Text.Json.Serialization.JsonPropertyName("Labels")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]   
+        public System.Collections.Generic.ICollection<LabelBase> Labels { get; }
+
+
+    }
+
     [JsonInheritanceConverter(typeof(LabelBase), "discriminator")]
-    [JsonInheritanceAttribute("Label", typeof(Label))]
     [JsonInheritanceAttribute("LabelSet", typeof(LabelSet))]
+    [JsonInheritanceAttribute("Label", typeof(Label))]
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v9.0.0.0)")]
     public abstract partial class LabelBase
     {
@@ -82,35 +105,15 @@ namespace Philips.MyNamespace
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v9.0.0.0)")]
-    public partial class LabelSet : LabelBase
-    {
-        [System.Text.Json.Serialization.JsonConstructor]
-
-        public LabelSet(string @id, bool? @isCreatedByReader, System.Collections.Generic.ICollection<LabelBase> @labels)
-
-
-            : base(id, isCreatedByReader)
-
-        {
-
-            this.Labels = @labels;
-
-        }
-        [System.Text.Json.Serialization.JsonPropertyName("Labels")]
-
-        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]   
-        public System.Collections.Generic.ICollection<LabelBase> Labels { get; }
-
-
-    }
-
+    /// <summary>
+    /// The Labelset
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v9.0.0.0)")]
     public partial class Task
     {
         [System.Text.Json.Serialization.JsonConstructor]
 
-        public Task(string @id, System.Collections.Generic.ICollection<LabelBase> @labelSet)
+        public Task(string @id, LabelSet @labelSet)
 
 
         {
@@ -119,14 +122,11 @@ namespace Philips.MyNamespace
 
             this.Id = @id;
 
-        }    /// <summary>
-        /// The Labelset
-        /// </summary>
-
+        }
         [System.Text.Json.Serialization.JsonPropertyName("LabelSet")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]   
-        public System.Collections.Generic.ICollection<LabelBase> LabelSet { get; }
+        public LabelSet LabelSet { get; }
 
 
         [System.Text.Json.Serialization.JsonPropertyName("Id")]

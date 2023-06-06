@@ -34,7 +34,7 @@ namespace Philips.NJsonSchemaInheritanceDemo {
                 labels
                 );
 
-            var myObject = new MyNamespace.Task("BiotelTask", labels);
+            var myObject = new MyNamespace.Task("BiotelTask", labelSet);
 
 
             var myObjectType = myObject.GetType();
